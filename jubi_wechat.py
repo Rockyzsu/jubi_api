@@ -234,7 +234,7 @@ if __name__ == '__main__':
     #print obj.getOrder('zet')
 
     coin_list=['zet','doge']
-    price_list=[[0.2,0.13],[0.03,0.024]]
+    price_list=[[0.2,0.13],[0.03,0.021]]
     #obj.warming('zet',0.24,0.16)
     obj.multi_thread(coin_list,price_list)
 
