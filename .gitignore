@@ -7,3 +7,6 @@ data.cfg
 /private
 *.log
 *.pkl
+*.csv
+*.xls
+*.json
