@@ -1,7 +1,9 @@
 # -*-coding=utf-8-*-
 import datetime
+import time
 import requests
 import pandas as pd
+import threading
 __author__ = 'Rocky'
 '''
 http://30daydo.com
@@ -18,12 +20,16 @@ class Storage():
                         'HLB','RSS','PGC','RIO','XAS','TFC','BLK','FZ','ANS','XPM','VTC',
                         'KTC','VRC','XSGS','LSK','PPC','ETC','GAME','LTC','ETH','BTC']
         self.url='http://www.jubi.com/api/v1/orders/'
+        self.today=datetime.datetime.now().strftime('%Y-%m-%d')
 
 
     def getOrders(self,coin):
-
-        js=requests.get(self.url,params={'coin':coin}).json()
-
+        try:
+            js=requests.get(self.url,params={'coin':coin}).json()
+        except Exception,e:
+            print e
+            print "can't get data, will retry"
+            time.sleep(30)
         #print js
         '''
         u'date': u'1496936989',
@@ -58,12 +64,20 @@ class Storage():
         time1=df['date'].values[0]
         df['date']=df['date'].map(lambda x:datetime.datetime.fromtimestamp(long(x) ))
         print df
-        df.to_csv('data.csv',mode='a',header=False)
+        filename=self.today+'_'+coin+'.csv'
+        df.to_csv(filename,mode='a',header=False)
 
+    def loops(self,coin):
+        while 1:
+            self.getOrders(coin)
+            time.sleep(10)
+
+    def multi_thread(self):
+        t1=threading.Thread(target=self.loops,args=('zet',))
 
     def testcase(self):
-        self.getOrders('zet')
-
+        #self.getOrders('zet')
+        self.loops('zet')
 if __name__=='__main__':
     obj=Storage()
     obj.testcase()
