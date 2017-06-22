@@ -30,6 +30,7 @@ class Storage():
             print e
             print "can't get data, will retry"
             time.sleep(30)
+            return
         #print js
         '''
         u'date': u'1496936989',
@@ -57,6 +58,8 @@ class Storage():
         '''
 
         df=pd.DataFrame(js,columns=['date','tid','price','type','amount'])
+        if len(df[df['amount']>50000]) > 0:
+            print "Big deal buy or sell"
         #print df
         df.set_index('tid',inplace=True)
         print df
@@ -64,6 +67,7 @@ class Storage():
         time1=df['date'].values[0]
         df['date']=df['date'].map(lambda x:datetime.datetime.fromtimestamp(long(x) ))
         print df
+
         filename=self.today+'_'+coin+'.csv'
         df.to_csv(filename,mode='a',header=False)
 
