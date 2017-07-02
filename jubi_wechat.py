@@ -132,7 +132,7 @@ class Jubi_web():
         lens = 12
         return ''.join([str(random.randint(0, 9)) for i in range(lens)])
 
-    def get_signiture(self):
+    def get_signature(self):
         url = 'https://www.jubi.com/api/v1/ticker/'
         coin = 'zet'
         nonce = self.get_nonce()
@@ -225,7 +225,7 @@ if __name__ == '__main__':
 
     obj = Jubi_web(send='wechat')
 
-    # print obj.get_signiture()
+    # print obj.get_signature()
     #print obj.real_time_ticker('zet')
     # obj.real_time_depth('zet')
     #obj.warming('zet',0.23,0.17)
