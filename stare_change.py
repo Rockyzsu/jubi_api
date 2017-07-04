@@ -7,8 +7,10 @@ Contact: weigesysu@qq.com
 #关注成交量暴涨的coin
 import requests,time,datetime,threading
 import pandas as pd
+from jubi_wechat import Jubi_web
 class CoinVol():
     def __init__(self):
+        self.obj_wc=Jubi_web()
         self.host='https://www.jubi.com'
         self.coin_list=['IFC','DOGE','EAC','DNC','MET','ZET','SKT','YTC','PLC','LKC',
                         'JBC','MRYC','GOOC','QEC','PEB','XRP','NXT','WDC','MAX','ZCC',
@@ -61,6 +63,7 @@ class CoinVol():
 
 
     def vol_detect(self,coin):
+
         url=self.host+'/api/v1/orders/'
         data={'coin':coin}
         print "in %s" %coin
@@ -88,13 +91,16 @@ class CoinVol():
                 print datetime.datetime.now().strftime('%H:%M:%S')
                 print "Coin : %s " %self.coin_name[coin],
                 print "buy more than 60 percent in the pass 100 order: %s\n" %buy_ratio
+                txt="buy more than 60 percent in the pass 100 order: %s\n" %buy_ratio
+                self.obj_wc.send_wechat(coin,txt)
             if float(df['amount'].values[0]) >100000:
                 print 'Coin : %s' %self.coin_name[coin],
                 print " Big deal more than 10w"
+                self.obj_wc.send_wechat(coin," Big deal more than 10w")
 
 
 
-            time.sleep(10)
+            time.sleep(60)
 
 
     def multi_thread(self):

@@ -17,7 +17,7 @@ from toolkit import Toolkit
 
 
 class Jubi_web():
-    def __init__(self, send=None):
+    def __init__(self, send='wechat'):
         cfg = Toolkit.getUserData('data.cfg')
         self.public_key = cfg['public_key']
         self.private_key = cfg['private_key']
