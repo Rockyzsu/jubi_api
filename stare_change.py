@@ -94,6 +94,7 @@ class CoinVol():
                 txt="buy more than 60 percent in the pass 100 order: %s\n" %buy_ratio
                 self.obj_wc.send_wechat(coin,txt)
             if float(df['amount'].values[0]) >100000:
+                print datetime.datetime.now().strftime('%H:%M:%S')
                 print 'Coin : %s' %self.coin_name[coin],
                 print " Big deal more than 10w"
                 self.obj_wc.send_wechat(coin," Big deal more than 10w")
