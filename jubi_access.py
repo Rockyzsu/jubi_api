@@ -85,6 +85,7 @@ class Jubi_access():
         key_value=self.public_key
         private_key=self.private_key
         s='nonce='+str(nonce_value)+'&'+'key='+key_value
+        s='key='+key_value+'&'+'nonce='+str(nonce_value)
         print s
         #signature是签名，是将amount price type nonce key等参数通过'&'字符连接起来通过md5(私钥)为key进行sha256算法加密得到的值.
         md5=self.getHash(private_key)
@@ -120,11 +121,15 @@ class Jubi_access():
         print url
         coin='zet'
         types='all'
-        since='2017-5-10 13:29:39'
+        #since='2017-5-10 13:29:39'
+        since=0
         nonce=self.get_nonce_time()
         key_value=self.public_key
         private_key=self.private_key
-        s='nonce='+str(nonce)+'&'+'type='+types+'&'+'coin='+coin+'&'+'since='+since+'&'+'key='+key_value
+
+        #s='nonce='+str(nonce)+'&'+'type='+types+'&'+'coin='+coin+'&'+'since='+since+'&'+'key='+key_value
+
+        s='coin='+coin+'&'+'since'+str(since)+'&'+'type='+types+'&'+'nonce='+str(nonce)+'&'+'key='+key_value
         print s
         md5=self.getHash(private_key)
 
@@ -138,6 +143,7 @@ class Jubi_access():
         print data_wrap1
         js=requests.post(url,data=data_wrap1).json()
         print js
+
     def order_id(self):
         url=self.host+'/api/v1/trade_view/'
         print url
@@ -167,12 +173,31 @@ class Jubi_access():
     def buy(self):
         url=self.host+'/api/v1/trade_add/'
 
+    def get_access(self):
+        url='https://www.jubi.com/api/v1/trade_list/'
+        nonce_value=self.get_nonce_time()
+        print nonce_value
+        key_value=self.public_key
+        private_key=self.private_key
+        types='all'
+        coin='zet'
+        since_value=0
+        s='type='+types+'&'+'since='+str(since_value)+'&'+'coin='+coin+'&'+'nonce='+str(nonce_value)+'&'+'key='+key_value
+        print s
+        #signature是签名，是将amount price type nonce key等参数通过'&'字符连接起来通过md5(私钥)为key进行sha256算法加密得到的值.
+        md5=self.getHash(private_key)
+        signature =hmac.new(md5,s,digestmod=hashlib.sha256).digest()
+        sig=self.toHex(signature)
+        data_wrap={'nonce':nonce_value,'key':key_value,'signature':sig,'type':types,'coin':coin,'since':since_value}
+
+        js=requests.post(url,data=data_wrap).json()
+        print js
 
     def testcase(self):
-        #self.getAccount()
+        self.getAccount()
         #self.order_id()
-        self.order_check()
-
+        #self.order_check()
+        #self.get_access()
 if __name__ == '__main__':
 
     obj = Jubi_access()
