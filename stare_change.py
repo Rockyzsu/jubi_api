@@ -8,9 +8,15 @@ Contact: weigesysu@qq.com
 import requests,time,datetime,threading
 import pandas as pd
 from jubi_wechat import Jubi_web
+from alert import play
 class CoinVol():
-    def __init__(self):
-        self.obj_wc=Jubi_web()
+    def __init__(self,wechat=False):
+
+
+        self.wechat=wechat
+        if self.wechat:
+            self.obj_wc=Jubi_web()
+
         self.host='https://www.jubi.com'
         self.coin_list=['IFC','DOGE','EAC','DNC','MET','ZET','SKT','YTC','PLC','LKC',
                         'JBC','MRYC','GOOC','QEC','PEB','XRP','NXT','WDC','MAX','ZCC',
@@ -61,8 +67,8 @@ class CoinVol():
                         'mryc':u'美人鱼币',
                             }
 
-
-    def vol_detect(self,coin):
+    #出现买单占比65%以上和成交量放大的,就警报
+    def vol_detect(self,coin,p_min,p_max,setup_timeout=60):
 
         url=self.host+'/api/v1/orders/'
         data={'coin':coin}
@@ -80,6 +86,10 @@ class CoinVol():
             df['date']=df['date'].map(lambda x:datetime.datetime.fromtimestamp(long(x) ))
 
             #print df
+            price_min=df['price'].min()
+            price_max=df['price'].max()
+            print 'recent max: ',price_max
+            print 'recent min: ',price_min
             #print df.info()
             #print df.dtypes
             buy_df=df[df['type']=='buy']
@@ -87,21 +97,36 @@ class CoinVol():
             buy_count= len(buy_df)
             total= len(df)
             buy_ratio=buy_count*1.00/total*100.00
+
+            if price_max>p_max:
+                print "max than ",price_max
+                play()
+            if price_min<p_min:
+                print 'min than ',price_min
+                play()
+
+
             if buy_ratio>65.0:
                 print datetime.datetime.now().strftime('%H:%M:%S')
                 print "Coin : %s " %self.coin_name[coin],
                 print "buy more than 60 percent in the pass 100 order: %s\n" %buy_ratio
                 txt="buy more than 60 percent in the pass 100 order: %s\n" %buy_ratio
-                self.obj_wc.send_wechat(coin,txt)
+                if self.wechat:
+                    self.obj_wc.send_wechat(coin,txt)
+                else:
+                    play()
             if float(df['amount'].values[0]) >100000:
                 print datetime.datetime.now().strftime('%H:%M:%S')
                 print 'Coin : %s' %self.coin_name[coin],
                 print " Big deal more than 10w"
-                self.obj_wc.send_wechat(coin," Big deal more than 10w")
+                if self.wechat:
+
+                    self.obj_wc.send_wechat(coin," Big deal more than 10w")
+                else:
+                    play()
 
 
-
-            time.sleep(60)
+            time.sleep(setup_timeout)
 
 
     def multi_thread(self):
@@ -110,7 +135,7 @@ class CoinVol():
         for i in self.coin_name:
             print i," ",
             print self.coin_name[i]
-            t=threading.Thread(target=self.vol_detect,args=(i,))
+            t=threading.Thread(target=self.vol_detect,args=(i,0.16,0.17))
             thread_list.append(t)
 
         for j in thread_list:
@@ -123,7 +148,7 @@ class CoinVol():
 
     def testcase(self):
         #self.multi_thread()
-        self.vol_detect('zet')
+        self.vol_detect('zet',0.15,0.195)
 if __name__=='__main__':
     obj=CoinVol()
     obj.testcase()
