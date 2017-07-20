@@ -88,6 +88,7 @@ class CoinVol():
             #print df
             price_min=df['price'].min()
             price_max=df['price'].max()
+            print 'Coin : %s' %self.coin_name[coin]
             print 'recent max: ',price_max
             print 'recent min: ',price_min
             #print df.info()
@@ -99,14 +100,18 @@ class CoinVol():
             buy_ratio=buy_count*1.00/total*100.00
 
             if price_max>p_max:
-                print "max than ",price_max
-                play()
+                print datetime.datetime.now().strftime('%H:%M:%S')
+                print 'Coin : %s' %self.coin_name[coin],
+                print "MAX than ",price_max
+                #play()
             if price_min<p_min:
-                print 'min than ',price_min
-                play()
+                print datetime.datetime.now().strftime('%H:%M:%S')
+                print 'Coin : %s' %self.coin_name[coin],
+                print 'MIN than ',price_min
+                #play()
 
 
-            if buy_ratio>65.0:
+            if buy_ratio>70.0:
                 print datetime.datetime.now().strftime('%H:%M:%S')
                 print "Coin : %s " %self.coin_name[coin],
                 print "buy more than 60 percent in the pass 100 order: %s\n" %buy_ratio
@@ -129,15 +134,21 @@ class CoinVol():
             time.sleep(setup_timeout)
 
 
-    def multi_thread(self):
+    def multi_thread(self,coin_list):
         thread_list=[]
-        print len(self.coin_name)
-        for i in self.coin_name:
+        #print len(self.coin_name)
+        '''
+        for i in coin_list:
             print i," ",
             print self.coin_name[i]
+            #print i
             t=threading.Thread(target=self.vol_detect,args=(i,0.16,0.17))
             thread_list.append(t)
-
+        '''
+        t1=threading.Thread(target=self.vol_detect,args=(coin_list[0],0.16,0.19))
+        t2=threading.Thread(target=self.vol_detect,args=(coin_list[1],0.009,0.012))
+        thread_list.append(t1)
+        thread_list.append(t2)
         for j in thread_list:
             j.start()
             #j.join()
@@ -147,9 +158,10 @@ class CoinVol():
 
 
     def testcase(self):
-        #self.multi_thread()
-        self.vol_detect('zet',0.15,0.195)
+        coin_list=['zet','eac']
+        self.multi_thread(coin_list)
+        #self.vol_detect('zet',0.15,0.195)
 if __name__=='__main__':
-    obj=CoinVol()
+    obj=CoinVol(True)
     obj.testcase()
 
