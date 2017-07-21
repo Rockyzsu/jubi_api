@@ -17,7 +17,7 @@ import requests,datetime,itchat
 import urllib,urllib2
 from toolkit import Toolkit
 #from Crypto import HMAC, SHA256
-
+from itertools import permutations
 class Jubi_access():
     def __init__(self):
         cfg = Toolkit.getUserData('data.cfg')
@@ -193,11 +193,39 @@ class Jubi_access():
         js=requests.post(url,data=data_wrap).json()
         print js
 
+    #下单
+    def TradeOder(self,coin,types,amount,price):
+        url='https://www.jubi.com/api/v1/trade_add/'
+        nonce_value=self.get_nonce_time()
+        #print nonce_value
+        key_value=self.public_key
+        private_key=self.private_key
+        #types='buy'
+        #coin='zet'
+        #amount=500
+        #price=0.1
+        #s="amount="+str(amount)+"&price="+str(price)+"&type="+types+"&nonce="+str(nonce_value)+"&key="+key_value+"&coin="+coin
+        #print s
+        s="nonce="+str(nonce_value)+"&price="+str(price)+"&amount="+str(amount)+"&key="+key_value+"&coin="+coin+"&type="+types
+        #print s
+        #signature是签名，是将amount price type nonce key等参数通过'&'字符连接起来通过md5(私钥)为key进行sha256算法加密得到的值.
+        md5=self.getHash(private_key)
+        signature =hmac.new(md5,s,digestmod=hashlib.sha256).digest()
+        sig=self.toHex(signature)
+        #print sig
+        data_wrap={'signature':sig,'nonce':str(nonce_value),'key':key_value,'coin':coin,'amount':amount,'price':price,'type':types}
+        print data_wrap
+        js=requests.post(url,data=data_wrap).json()
+        print js
+
+
+
     def testcase(self):
-        self.getAccount()
+        #self.getAccount()
         #self.order_id()
         #self.order_check()
         #self.get_access()
+        self.Oder_T()
 if __name__ == '__main__':
 
     obj = Jubi_access()
