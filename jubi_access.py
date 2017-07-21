@@ -17,7 +17,7 @@ import requests,datetime,itchat
 import urllib,urllib2
 from toolkit import Toolkit
 #from Crypto import HMAC, SHA256
-
+from itertools import permutations
 class Jubi_access():
     def __init__(self):
         cfg = Toolkit.getUserData('data.cfg')
@@ -194,30 +194,27 @@ class Jubi_access():
         print js
 
     #下单
-    def Oder_T(self):
+    def TradeOder(self,coin,types,amount,price):
         url='https://www.jubi.com/api/v1/trade_add/'
         nonce_value=self.get_nonce_time()
-        print nonce_value
+        #print nonce_value
         key_value=self.public_key
         private_key=self.private_key
-        types='buy'
-        coin='zet'
-        since_value=0
-        amount=500
-        price=0.119443
-
-         #"amount="+amount+"&price="+price+"&type="+type+"&nonce="+timeStr+"&key="+this.accessKey+"&coin="+symbol;
-        s="amount="+str(amount)+"&price="+str(price)+"&type="+types+"&nonce="+str(nonce_value)+"&key="+key_value+"&coin="+coin
-        #s='type='+types+'&'+'since='+str(since_value)+'&'+'coin='+coin+'&'+'nonce='+str(nonce_value)+'&'+'key='+key_value
-        print s
+        #types='buy'
+        #coin='zet'
+        #amount=500
+        #price=0.1
+        #s="amount="+str(amount)+"&price="+str(price)+"&type="+types+"&nonce="+str(nonce_value)+"&key="+key_value+"&coin="+coin
+        #print s
+        s="nonce="+str(nonce_value)+"&price="+str(price)+"&amount="+str(amount)+"&key="+key_value+"&coin="+coin+"&type="+types
+        #print s
         #signature是签名，是将amount price type nonce key等参数通过'&'字符连接起来通过md5(私钥)为key进行sha256算法加密得到的值.
         md5=self.getHash(private_key)
         signature =hmac.new(md5,s,digestmod=hashlib.sha256).digest()
-        print signature
         sig=self.toHex(signature)
-        print sig
-        data_wrap={'nonce':nonce_value,'key':key_value,'signature':sig,'coin':coin,'amount':amount,'price':price,'type':types}
-
+        #print sig
+        data_wrap={'signature':sig,'nonce':str(nonce_value),'key':key_value,'coin':coin,'amount':amount,'price':price,'type':types}
+        print data_wrap
         js=requests.post(url,data=data_wrap).json()
         print js
 
