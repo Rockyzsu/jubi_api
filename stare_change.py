@@ -162,6 +162,6 @@ class CoinVol():
         self.multi_thread(coin_list)
         #self.vol_detect('zet',0.15,0.195)
 if __name__=='__main__':
-    obj=CoinVol(True)
+    obj=CoinVol()
     obj.testcase()
 
