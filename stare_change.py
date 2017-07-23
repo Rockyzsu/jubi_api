@@ -67,6 +67,7 @@ class CoinVol():
                         'mryc':u'美人鱼币',
                             }
 
+
     #出现买单占比65%以上和成交量放大的,就警报
     def vol_detect(self,coin,p_min,p_max,setup_timeout=60):
 
@@ -120,7 +121,7 @@ class CoinVol():
                     self.obj_wc.send_wechat(coin,txt)
                 else:
                     play()
-            if float(df['amount'].values[0]) >100000:
+            if float(df['amount'].values[0]) >1000000:
                 print datetime.datetime.now().strftime('%H:%M:%S')
                 print 'Coin : %s' %self.coin_name[coin],
                 print " Big deal more than 10w"
@@ -145,7 +146,7 @@ class CoinVol():
             t=threading.Thread(target=self.vol_detect,args=(i,0.16,0.17))
             thread_list.append(t)
         '''
-        t1=threading.Thread(target=self.vol_detect,args=(coin_list[0],0.16,0.19))
+        t1=threading.Thread(target=self.vol_detect,args=(coin_list[0],0.19,0.22))
         t2=threading.Thread(target=self.vol_detect,args=(coin_list[1],0.009,0.012))
         thread_list.append(t1)
         thread_list.append(t2)
