@@ -207,16 +207,16 @@ class Jubi_access():
         #s="amount="+str(amount)+"&price="+str(price)+"&type="+types+"&nonce="+str(nonce_value)+"&key="+key_value+"&coin="+coin
         #print s
         s="nonce="+str(nonce_value)+"&price="+str(price)+"&amount="+str(amount)+"&key="+key_value+"&coin="+coin+"&type="+types
-        #print s
+        print s
         #signature是签名，是将amount price type nonce key等参数通过'&'字符连接起来通过md5(私钥)为key进行sha256算法加密得到的值.
         md5=self.getHash(private_key)
         signature =hmac.new(md5,s,digestmod=hashlib.sha256).digest()
         sig=self.toHex(signature)
         #print sig
-        data_wrap={'signature':sig,'nonce':str(nonce_value),'key':key_value,'coin':coin,'amount':amount,'price':price,'type':types}
+        data_wrap={'signature':sig,'nonce':str(nonce_value),'coin':coin,'key':key_value,'amount':amount,'price':price,'type':types}
         print data_wrap
-        js=requests.post(url,data=data_wrap).json()
-        print js
+        #js=requests.post(url,data=data_wrap).json()
+        #print js
 
 
 
@@ -225,7 +225,7 @@ class Jubi_access():
         #self.order_id()
         #self.order_check()
         #self.get_access()
-        self.Oder_T()
+        self.TradeOder('zet','buy','100',200)
 if __name__ == '__main__':
 
     obj = Jubi_access()
