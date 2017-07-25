@@ -215,8 +215,8 @@ class Jubi_access():
         #print sig
         data_wrap={'signature':sig,'nonce':str(nonce_value),'coin':coin,'key':key_value,'amount':amount,'price':price,'type':types}
         print data_wrap
-        #js=requests.post(url,data=data_wrap).json()
-        #print js
+        js=requests.post(url,data=data_wrap).json()
+        print js
 
 
 
@@ -225,7 +225,7 @@ class Jubi_access():
         #self.order_id()
         #self.order_check()
         #self.get_access()
-        self.TradeOder('zet','buy','100',200)
+        self.TradeOder('zet','buy','100',0.01)
 if __name__ == '__main__':
 
     obj = Jubi_access()
