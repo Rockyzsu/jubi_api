@@ -335,6 +335,19 @@ class api_demo():
         #print s
         return s
 
+<<<<<<< HEAD
+=======
+    def get_Completed_order(self,coin):
+        js = self.Trade_list(coin)
+        df=self.Data_DF(js)
+        #速度太慢，使用多进程
+        df['status'] = df['id'].map(lambda x: self.Trade_view(coin, x)['status'])
+        df = df[df[u'status'] == u'closed']
+        self.current_order = df
+        return self.current_order
+
+
+>>>>>>> 93522ccc454b60ff763ef4866e4376d0a8ecffb9
     def matrix_trade_list(self, coin,l,q):
         result=[]
         for i in l:
@@ -447,6 +460,7 @@ class api_demo():
         for i in id_list:
             print i
             p.apply_async(self.Trade_View_Q,args=(coin,i,q,))
+<<<<<<< HEAD
         '''
         resultqq=[]
         for i in range(len(id_list)):
@@ -467,6 +481,28 @@ class api_demo():
         #df=self.Data_DF(result)
         #print df
         '''
+=======
+        '''
+        resultqq=[]
+        for i in range(len(id_list)):
+            resultqq[i]=p.map(self.Trade_view_m,id_list[i])
+
+        p.close()
+        p.join()
+        print "Finish Multi-Process"
+        print resultqq
+        '''
+        result=[]
+        while not q.empty():
+            t=q.get()
+            print t
+            result.append(t)
+
+        print result
+        #df=self.Data_DF(result)
+        #print df
+        '''
+>>>>>>> 93522ccc454b60ff763ef4866e4376d0a8ecffb9
 
     #格式转换
     def Data_DF(self, js):
@@ -492,7 +528,13 @@ def main():
     #print obj.get_Recent_Order('zet', '2017-07-28')
     #print obj.get_OpenOrder('zet')
     #obj.get_OpenOrder_MultiCore('zet')
+<<<<<<< HEAD
     obj.get_OpenOrder_Thread('zet')
 
+=======
+    #obj.get_OpenOrder_Thread('zet')
+    df= obj.get_Completed_order('zet')
+    df.to_excel('closed.xls')
+>>>>>>> 93522ccc454b60ff763ef4866e4376d0a8ecffb9
 if __name__ == '__main__':
     main()
