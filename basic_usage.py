@@ -336,7 +336,11 @@ class api_demo():
         return s
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+
+>>>>>>> origin/master
     def get_Completed_order(self,coin):
         js = self.Trade_list(coin)
         df=self.Data_DF(js)
@@ -347,7 +351,11 @@ class api_demo():
         return self.current_order
 
 
+<<<<<<< HEAD
 >>>>>>> 93522ccc454b60ff763ef4866e4376d0a8ecffb9
+=======
+
+>>>>>>> origin/master
     def matrix_trade_list(self, coin,l,q):
         result=[]
         for i in l:
@@ -461,27 +469,10 @@ class api_demo():
             print i
             p.apply_async(self.Trade_View_Q,args=(coin,i,q,))
 <<<<<<< HEAD
-        '''
-        resultqq=[]
-        for i in range(len(id_list)):
-            resultqq[i]=p.map(self.Trade_view_m,id_list[i])
-
-        p.close()
-        p.join()
-        print "Finish Multi-Process"
-        print resultqq
-        '''
-        result=[]
-        while not q.empty():
-            t=q.get()
-            print t
-            result.append(t)
-
-        print result
-        #df=self.Data_DF(result)
-        #print df
-        '''
+<<<<<<< HEAD
 =======
+
+>>>>>>> origin/master
         '''
         resultqq=[]
         for i in range(len(id_list)):
@@ -501,8 +492,34 @@ class api_demo():
         print result
         #df=self.Data_DF(result)
         #print df
+        '''
+
+        '''
+        resultqq=[]
+        for i in range(len(id_list)):
+            resultqq[i]=p.map(self.Trade_view_m,id_list[i])
+
+        p.close()
+        p.join()
+        print "Finish Multi-Process"
+        print resultqq
+        '''
+        result=[]
+        while not q.empty():
+            t=q.get()
+            print t
+            result.append(t)
+
+        print result
+        #df=self.Data_DF(result)
+        #print df
+<<<<<<< HEAD
         '''
 >>>>>>> 93522ccc454b60ff763ef4866e4376d0a8ecffb9
+=======
+
+
+>>>>>>> origin/master
 
     #格式转换
     def Data_DF(self, js):
@@ -529,12 +546,22 @@ def main():
     #print obj.get_OpenOrder('zet')
     #obj.get_OpenOrder_MultiCore('zet')
 <<<<<<< HEAD
+<<<<<<< HEAD
     obj.get_OpenOrder_Thread('zet')
-
 =======
+>>>>>>> origin/master
+
     #obj.get_OpenOrder_Thread('zet')
+<<<<<<< HEAD
     df= obj.get_Completed_order('zet')
     df.to_excel('closed.xls')
 >>>>>>> 93522ccc454b60ff763ef4866e4376d0a8ecffb9
+=======
+    #df= obj.get_Completed_order('zet')
+    #df.to_excel('closed.xls')
+
+    obj.get_OpenOrder_Thread('zet')
+
+>>>>>>> origin/master
 if __name__ == '__main__':
     main()

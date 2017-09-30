@@ -69,12 +69,14 @@ class CoinVol():
 
 
     #出现买单占比65%以上和成交量放大的,就警报
-    def vol_detect(self,coin,p_min,p_max,setup_timeout=60):
+    def vol_detect(self,coin,setup_timeout=60):
 
         url=self.host+'/api/v1/orders/'
         data={'coin':coin}
         print "in %s" %coin
         while 1:
+            price_max=open('args.txt','r')
+            price_min=open()
             try:
                 js=requests.get(url,params=data).json()
             except Exception,e:
@@ -146,20 +148,24 @@ class CoinVol():
             t=threading.Thread(target=self.vol_detect,args=(i,0.16,0.17))
             thread_list.append(t)
         '''
+
+
         t1=threading.Thread(target=self.vol_detect,args=(coin_list[0],0.19,0.22))
-        t2=threading.Thread(target=self.vol_detect,args=(coin_list[1],0.009,0.012))
-        thread_list.append(t1)
-        thread_list.append(t2)
-        for j in thread_list:
-            j.start()
+        t1.start()
+        t1.join()
+        #t2=threading.Thread(target=self.vol_detect,args=(coin_list[1],0.009,0.012))
+        #thread_list.append(t1)
+        #thread_list.append(t2)
+        #for j in thread_list:
+            #j.start()
             #j.join()
-        for k in thread_list:
-            k.join()
+        #for k in thread_list:
+            #k.join()
 
 
 
     def testcase(self):
-        coin_list=['zet','eac']
+        coin_list=['zet']
         self.multi_thread(coin_list)
         #self.vol_detect('zet',0.15,0.195)
 if __name__=='__main__':
