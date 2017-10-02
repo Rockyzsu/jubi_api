@@ -54,7 +54,7 @@ class Jubi_access():
         nonece=long(curr_stamp)
         return nonece
 
-    def get_signiture(self,):
+    def get_signature(self,):
 
         nonce_value=self.get_nonce_time()
         key_value=self.public_key
@@ -230,7 +230,7 @@ if __name__ == '__main__':
 
     obj = Jubi_access()
     obj.testcase()
-    # print obj.get_signiture()
+    # print obj.get_signature()
     #print obj.real_time_ticker('zet')
     # obj.real_time_depth('zet')
     #obj.warming('zet',0.23,0.17)
